@@ -58,6 +58,7 @@ export default async function LibraryLegacyPage({ params }: PageProps) {
       : !page.ok
         ? `This page could not be scraped earlier (${page.status}).`
         : "";
+  const pageHtml = page?.html ?? "";
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:py-14">
@@ -91,7 +92,7 @@ export default async function LibraryLegacyPage({ params }: PageProps) {
         ) : (
           <article
             className="legacy-content text-[#3d1620]"
-            dangerouslySetInnerHTML={{ __html: page.html }}
+            dangerouslySetInnerHTML={{ __html: pageHtml }}
           />
         )}
       </div>
