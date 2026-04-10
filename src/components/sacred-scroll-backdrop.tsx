@@ -3,6 +3,7 @@
 import type { MotionValue } from "framer-motion";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import type { CSSProperties } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { PichwaiCutoutLayers } from "@/components/pichwai-cutout-layers";
 import { RiverBottomBackdrop } from "@/components/river-bottom-backdrop";
@@ -124,6 +125,21 @@ function AnimatedBackdrop({ showDecorativeLayers }: { showDecorativeLayers: bool
   const { scrollYProgress } = useScroll();
   const p = useSpring(scrollYProgress, { stiffness: 42, damping: 26, mass: 0.4 });
   const bgPosY = useTransform(p, [0, 1], ["0%", "100%"]);
+  const [isLowPowerMode, setIsLowPowerMode] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mediaMobile = window.matchMedia("(max-width: 900px)");
+    const mediaReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setIsLowPowerMode(mediaMobile.matches || mediaReduced.matches);
+    update();
+    mediaMobile.addEventListener("change", update);
+    mediaReduced.addEventListener("change", update);
+    return () => {
+      mediaMobile.removeEventListener("change", update);
+      mediaReduced.removeEventListener("change", update);
+    };
+  }, []);
 
   const yLotus = useTransform(p, [0, 1], [0, -45]);
   const yPeacock = useTransform(p, [0, 1], [0, 35]);
@@ -132,7 +148,8 @@ function AnimatedBackdrop({ showDecorativeLayers }: { showDecorativeLayers: bool
   const rotPeacock = useTransform(p, [0, 1], [0, 6]);
   const swayCow = useTransform(p, [0, 1], [-2, 3]);
 
-  const showSvg = showDecorativeLayers && showSvgMotifsBehindCutouts;
+  const showHeavyDecorativeLayers = showDecorativeLayers && !isLowPowerMode;
+  const showSvg = showHeavyDecorativeLayers && showSvgMotifsBehindCutouts;
 
   return (
     <div className="pointer-events-none fixed inset-0 z-0 isolate overflow-hidden" aria-hidden>
@@ -162,7 +179,7 @@ function AnimatedBackdrop({ showDecorativeLayers }: { showDecorativeLayers: bool
         <rect width="100%" height="100%" fill="url(#pichwai-vine)" />
       </svg>
 
-      {showDecorativeLayers ? (
+      {showHeavyDecorativeLayers ? (
         <div
           data-no-save
           className="relative z-20"
@@ -185,7 +202,7 @@ function AnimatedBackdrop({ showDecorativeLayers }: { showDecorativeLayers: bool
         </div>
       ) : null}
 
-      {showDecorativeLayers ? <RiverBottomBackdrop /> : null}
+      {showHeavyDecorativeLayers ? <RiverBottomBackdrop /> : null}
 
       <div
         className="absolute inset-x-0 top-0 z-30 h-32 bg-gradient-to-b from-amber-200/15 to-transparent"
