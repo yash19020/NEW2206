@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import Link from "next/link";
+import { LegacyHtmlContent } from "@/components/legacy-html-content";
 import { LEGACY_ORIGIN } from "@/lib/navigation";
 
 type PageProps = {
@@ -36,6 +37,17 @@ async function readLegacySnapshot(): Promise<LegacySnapshot | null> {
   }
 }
 
+function sanitizeLegacyHtml(html: string) {
+  return html
+    .replace(/<!doctype[\s\S]*?>/gi, "")
+    .replace(/<\/?html[^>]*>/gi, "")
+    .replace(/<\/?head[^>]*>[\s\S]*?<\/head>/gi, "")
+    .replace(/<\/?body[^>]*>/gi, "")
+    .replace(/<marquee[\s\S]*?<\/marquee>/gi, "")
+    .replace(/<table\b/gi, '<div class="legacy-table-wrap"><table')
+    .replace(/<\/table>/gi, "</table></div>");
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const path = slug.join("/");
@@ -59,6 +71,7 @@ export default async function LibraryLegacyPage({ params }: PageProps) {
         ? `This page could not be scraped earlier (${page.status}).`
         : "";
   const pageHtml = page?.html ?? "";
+  const responsiveHtml = sanitizeLegacyHtml(pageHtml);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:py-14">
@@ -90,10 +103,7 @@ export default async function LibraryLegacyPage({ params }: PageProps) {
             </p>
           </div>
         ) : (
-          <article
-            className="legacy-content text-[#3d1620]"
-            dangerouslySetInnerHTML={{ __html: pageHtml }}
-          />
+          <LegacyHtmlContent html={responsiveHtml} />
         )}
       </div>
     </div>

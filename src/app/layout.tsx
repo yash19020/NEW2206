@@ -50,7 +50,7 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={`${dmSans.variable} ${literata.variable} h-full scroll-smooth`}
     >
-      <body className="relative flex min-h-full flex-col font-sans antialiased">
+      <body suppressHydrationWarning className="relative flex min-h-full flex-col font-sans antialiased">
         <NoSaveProvider />
         <SacredScrollBackdrop />
         <div className="relative z-10 flex min-h-full flex-col">

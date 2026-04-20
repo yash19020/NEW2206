@@ -123,6 +123,66 @@ details summary::-webkit-details-marker {
   height: auto;
 }
 
+.legacy-content iframe {
+  width: min(100%, 960px);
+  max-width: 100%;
+  border: 0;
+}
+
+.legacy-content .legacy-table-wrap {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  .legacy-content table {
+    width: 100%;
+    border: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 0.8rem 0;
+  }
+
+  .legacy-content thead {
+    display: none;
+  }
+
+  .legacy-content tbody,
+  .legacy-content tr,
+  .legacy-content td {
+    display: block;
+    width: 100%;
+  }
+
+  .legacy-content tr {
+    margin-bottom: 0.75rem;
+    border: 1px solid rgba(114, 47, 55, 0.2);
+    border-radius: 0.65rem;
+    background: rgba(255, 253, 248, 0.82);
+    overflow: hidden;
+  }
+
+  .legacy-content td {
+    border: 0;
+    border-bottom: 1px solid rgba(114, 47, 55, 0.12);
+    padding: 0.5rem 0.65rem;
+    font-size: 0.9rem;
+    line-height: 1.35;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .legacy-content td:last-child {
+    border-bottom: 0;
+  }
+
+  .legacy-content iframe {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+}
+
 @media (max-width: 900px) {
   .glass-panel {
     backdrop-filter: none;
