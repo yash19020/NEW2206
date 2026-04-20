@@ -1,7 +1,13 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { navItems, site } from "@/lib/content";
 
 export function SiteFooter() {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+
   return (
     <footer className="relative z-10 mt-auto border-t-2 border-[#c9a227]/35 bg-[#fdf6e8]/90 backdrop-blur-md">
       <div className="mx-auto max-w-6xl px-4 py-7 sm:px-6">
@@ -18,7 +24,9 @@ export function SiteFooter() {
               Explore
             </p>
             <ul className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
-              {navItems.map((item) => (
+              {navItems
+                .filter((item) => !(isHome && item.href === "/"))
+                .map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}

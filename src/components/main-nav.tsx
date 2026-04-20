@@ -323,6 +323,8 @@ export function MainNav() {
   const [open, setOpen] = useState(false);
   const close = useCallback(() => setOpen(false), []);
   const bodyReady = useClientMounted();
+  const pathname = usePathname();
+  const isHome = pathname === "/";
 
   useEffect(() => {
     if (!open) return;
@@ -378,11 +380,13 @@ export function MainNav() {
           </button>
         </div>
         <div className="min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain p-3 pb-[max(1rem,env(safe-area-inset-bottom))]">
-          <div className="px-1">
-            <PillLink href="/" onClick={close}>
-              Home
-            </PillLink>
-          </div>
+          {!isHome ? (
+            <div className="px-1">
+              <PillLink href="/" onClick={close}>
+                Home
+              </PillLink>
+            </div>
+          ) : null}
           {[
             { label: "Acharyas", children: acharyasTree },
             { label: "Scriptures", children: scripturesTree },
@@ -448,7 +452,7 @@ export function MainNav() {
         className="hidden w-full max-w-5xl flex-wrap items-center justify-center gap-x-2 gap-y-2 md:flex lg:max-w-none lg:justify-end"
         aria-label="Main navigation"
       >
-        <PillLink href="/">Home</PillLink>
+        {!isHome ? <PillLink href="/">Home</PillLink> : null}
 
         <PortalDropdown label="Acharyas">
           <TreeLinks nodes={acharyasTree} />
