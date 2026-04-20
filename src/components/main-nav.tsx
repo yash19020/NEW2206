@@ -290,7 +290,7 @@ function MobileNode({ node, onNavigate }: { node: NavNode; onNavigate: () => voi
       <summary className="cursor-pointer list-none px-4 py-3.5 text-sm font-medium text-[#4a1c24] [&::-webkit-details-marker]:hidden">
         <span className="flex items-center justify-between gap-2">
           {node.label}
-          <ChevronDown className="text-[#722f37]/60 transition-transform group-open:rotate-180" />
+          <ChevronDown className="main-nav-mobile-chevron text-[#722f37]/60 transition-transform group-open:rotate-180" />
         </span>
       </summary>
       <div className="main-nav-mobile-details-body border-t border-[#c9a227]/25 bg-[#fdf6e8]/80 px-2 py-2">
@@ -368,7 +368,7 @@ export function MainNav() {
           <button
             type="button"
             onClick={close}
-            className="rounded-lg p-2 text-[#722f37]/70 hover:bg-[#f5e6c8]"
+            className="main-nav-mobile-close rounded-lg p-2 text-[#722f37]/70 hover:bg-[#f5e6c8]"
             aria-label="Close"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden>
