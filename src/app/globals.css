@@ -487,6 +487,12 @@ details summary::-webkit-details-marker {
   :root[data-theme="dark"] .dark-shooting-stars {
     display: none !important;
   }
+
+  /* Also freeze scroll-linked backdrop motion in dark mode on mobile */
+  :root[data-theme="dark"] .sacred-bg-layer {
+    background-position-y: 0% !important;
+    will-change: auto !important;
+  }
 }
 
 .legacy-content {
