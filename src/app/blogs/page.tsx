@@ -11,7 +11,7 @@ export default async function BlogsPage({
   const snapshot = await readPushtipediaSnapshot();
   const filtered = query
     ? snapshot.items.filter((item) => {
-        const text = `${item.title} ${item.excerpt ?? ""} ${item.plainText ?? ""}`.toLowerCase();
+        const text = `${item.title} ${item.excerpt ?? ""}`.toLowerCase();
         return text.includes(query);
       })
     : snapshot.items;
@@ -63,12 +63,17 @@ export default async function BlogsPage({
         <div className="mt-6 space-y-3">
           {filtered.map((item) => (
             <article
-              key={item.id}
+              key={item.id ?? item.sourceUrl ?? item.href ?? item.title}
               className="rounded-xl border border-[#c9a227]/35 bg-[#fff9ed]/85 p-4 shadow-sm"
             >
-              <Link href={`/blogs/${item.slug}`} className="font-medium text-[#1a5c3a] hover:underline">
+              <a
+                href={item.sourceUrl ?? item.href ?? snapshot.source}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-[#1a5c3a] hover:underline"
+              >
                 {item.title}
-              </Link>
+              </a>
               {item.excerpt ? <p className="mt-1.5 text-sm text-[#3d1620]">{item.excerpt}</p> : null}
             </article>
           ))}

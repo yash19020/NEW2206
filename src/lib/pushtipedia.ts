@@ -2,14 +2,15 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 export type PushtipediaBlogItem = {
-  id: string;
-  slug: string;
-  sourceTitle: string;
-  sourceUrl: string;
+  id?: string;
+  slug?: string;
+  sourceTitle?: string;
+  sourceUrl?: string;
+  href?: string;
   title: string;
-  excerpt: string;
-  plainText: string;
-  html: string;
+  excerpt?: string;
+  plainText?: string;
+  html?: string;
 };
 
 export type PushtipediaSnapshot = {
