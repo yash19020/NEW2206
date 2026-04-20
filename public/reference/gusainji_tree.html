@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>मूल एवं व्याख्या वृक्ष</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fdf8f0;
+    --paper: #fffdf7;
+    --ink: #1a1208;
+    --accent: #8b4513;
+    --accent-light: #c4874a;
+    --line: #9c7240;
+    --node-bg: #fff9ee;
+    --node-border: #c4874a;
+    --root-bg: #3d1f00;
+    --root-text: #fdf2d0;
+    --section-bg: #6b3410;
+    --section-text: #fdf2d0;
+    --shadow: rgba(139, 69, 19, 0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    font-family: 'Noto Serif Devanagari', serif;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 40px 20px;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(196,135,74,0.06) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(139,69,19,0.05) 0%, transparent 50%);
+  }
+
+  .page-title {
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    margin-bottom: 48px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--node-border);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .chart-section {
+    max-width: 960px;
+    margin: 0 auto 64px;
+    background: var(--paper);
+    border-radius: 12px;
+    border: 1px solid var(--node-border);
+    box-shadow: 0 4px 32px var(--shadow);
+    padding: 40px 36px;
+    overflow-x: auto;
+  }
+
+  /* ─── TREE STYLES ─── */
+  .tree {
+    display: inline-block;
+    min-width: 100%;
+  }
+
+  .tree ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  /* Root node */
+  .tree > ul > li > .node {
+    background: var(--root-bg);
+    color: var(--root-text);
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-color: var(--root-bg);
+    padding: 8px 24px;
+    letter-spacing: 0.1em;
+  }
+
+  /* Vertical connector from root down */
+  .tree > ul {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 0;
+  }
+
+  /* Level 1 children layout */
+  .level-1 {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0;
+    padding-top: 0;
+    margin-top: 0;
+    padding-left: 0;
+  }
+
+  /* Generic tree built with nested ULs */
+  .tree-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ─── CUSTOM TREE COMPONENTS ─── */
+  .node {
+    display: inline-block;
+    background: var(--node-bg);
+    border: 1.5px solid var(--node-border);
+    border-radius: 6px;
+    padding: 5px 14px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--ink);
+    white-space: nowrap;
+    box-shadow: 0 2px 8px var(--shadow);
+    transition: background 0.2s, transform 0.15s;
+    cursor: default;
+    line-height: 1.5;
+  }
+  .node:hover {
+    background: #fff3d4;
+    transform: translateY(-1px);
+  }
+  .node.root {
+    background: var(--root-bg);
+    color: var(--root-text);
+    font-size: 1rem;
+    font-weight: 700;
+    border-color: var(--root-bg);
+    padding: 8px 28px;
+    letter-spacing: 0.08em;
+  }
+  .node.section {
+    background: var(--section-bg);
+    color: var(--section-text);
+    font-weight: 600;
+    font-size: 0.85rem;
+    border-color: var(--section-bg);
+  }
+  .node.sub-section {
+    background: #7a4520;
+    color: #fdf2d0;
+    font-weight: 600;
+    font-size: 0.8rem;
+    border-color: #7a4520;
+  }
+
+  /* ─── HORIZONTAL TREE LAYOUT ─── */
+  .h-tree {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .h-tree-root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .h-tree-root > .node {
+    margin-bottom: 0;
+  }
+
+  /* connector line down from root */
+  .v-line {
+    width: 2px;
+    background: var(--line);
+    height: 28px;
+    margin: 0 auto;
+  }
+
+  /* ─── TABLE-BASED TREE ─── */
+  .branch-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  /* ─── CLEAN CSS TREE ─── */
+  .ct { position: relative; }
+  .ct ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  /* vertical-layout tree (top-down, branches go right) */
+  .vt-root { display: flex; flex-direction: column; align-items: flex-start; }
+  .vt-root > .node { align-self: center; }
+
+  /* The whole chart rendered via structured divs */
+  .chart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  /* ─── PRECISE TREE USING NESTED FLEX ─── */
+  .tf { /* tree-flex */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .tf-children {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    position: relative;
+    padding-top: 20px;
+    gap: 12px;
+  }
+  .tf-children::before { /* horizontal line spanning children */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: calc(50% / var(--child-count, 1));
+    right: calc(50% / var(--child-count, 1));
+    height: 2px;
+    background: var(--line);
+  }
+  .tf-child {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+  .tf-child::before { /* vertical drop to child */
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 20px;
+    background: var(--line);
+  }
+
+  /* ─── INDENTED TREE (for deep structures) ─── */
+  .indent-tree { width: 100%; }
+  .indent-tree .it-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    position: relative;
+  }
+  .indent-tree .it-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-right: 0;
+    margin-right: 0;
+  }
+  .indent-tree .it-branch {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .it-group {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0;
+    margin-top: 4px;
+  }
+  .it-lines {
+    display: flex;
+    flex-direction: column;
+    margin-right: 4px;
+    margin-top: 2px;
+  }
+  .it-children {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .it-child-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  /* ─── FINAL CLEAN APPROACH: pure CSS tree with lines ─── */
+  .pure-tree, .pure-tree ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .pure-tree { padding-left: 0; }
+  .pure-tree li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .pure-tree .node-wrap {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .pure-tree .vert-line {
+    width: 18px;
+    border-left: 2px solid var(--line);
+    border-bottom: 2px solid var(--line);
+    height: 16px;
+    margin-right: 4px;
+    margin-top: 0;
+    flex-shrink: 0;
+    align-self: flex-start;
+    margin-top: 10px;
+  }
+  .pure-tree .cont-line {
+    width: 18px;
+    border-left: 2px solid var(--line);
+    height: 100%;
+    margin-right: 4px;
+    flex-shrink: 0;
+  }
+  .pure-tree ul {
+    padding-left: 22px;
+    border-left: 2px solid var(--line);
+    margin-left: 10px;
+    margin-top: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .pure-tree ul li .node-wrap::before {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 2px;
+    background: var(--line);
+    margin-right: 6px;
+    margin-top: 12px;
+    flex-shrink: 0;
+  }
+
+  /* root connector */
+  .root-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  /* ─── CHART TITLE ─── */
+  .chart-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 28px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid #dcc49a;
+    letter-spacing: 0.06em;
+  }
+
+  /* ─── TOP TREE (horizontal branching) ─── */
+  .top-tree {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  .top-tree .root-node {
+    display: inline-block;
+  }
+  .top-tree .root-vline {
+    width: 2px;
+    height: 22px;
+    background: var(--line);
+  }
+  .top-tree .branches {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    position: relative;
+    padding-top: 22px;
+    gap: 20px;
+  }
+  /* horizontal bar above all branches */
+  .top-tree .branches::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 60px);
+    height: 2px;
+    background: var(--line);
+  }
+  .top-tree .branch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    min-width: 120px;
+  }
+  /* vertical drop from horizontal bar */
+  .top-tree .branch::before {
+    content: '';
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 22px;
+    background: var(--line);
+  }
+  /* children of a branch (vertical list with left-side bar) */
+  .branch-children {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 6px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line);
+    gap: 5px;
+    width: 100%;
+  }
+  .branch-child {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0;
+  }
+  .branch-child::before {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 2px;
+    background: var(--line);
+    margin-right: 5px;
+    margin-top: 12px;
+    flex-shrink: 0;
+  }
+  /* sub-children */
+  .branch-sub-children {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 14px;
+    border-left: 2px solid var(--line);
+    gap: 4px;
+    margin-left: 2px;
+    margin-top: 4px;
+  }
+  .branch-sub-child {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .branch-sub-child::before {
+    content: '';
+    display: inline-block;
+    width: 10px;
+    height: 2px;
+    background: var(--line);
+    margin-right: 4px;
+    margin-top: 11px;
+    flex-shrink: 0;
+  }
+
+  /* Two sub-trees side by side for chart 1 bottom */
+  .dual-section {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .dual-part {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .separator {
+    width: 100%;
+    height: 1.5px;
+    background: linear-gradient(to right, transparent, var(--node-border), transparent);
+    margin: 32px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-title">वल्लभ सम्प्रदाय — ग्रन्थ वर्गीकरण</div>
+
+<!-- ════════════════════════════════════════
+     CHART 1: मूल
+════════════════════════════════════════ -->
+<div class="chart-section">
+  <div class="chart-title">चित्र १ — मूल ग्रन्थ</div>
+
+  <!-- ROOT -->
+  <div class="top-tree">
+    <div class="root-node"><span class="node root">मूल</span></div>
+    <div class="root-vline"></div>
+
+    <!-- 8 main branches: वाद, ९ विज्ञप्ति , सेवोपयोगी, १६ पत्र,  स्तोत्र, उपदेश, लीला, प्रकीर्ण, [bottom section] -->
+    <div class="branches" style="--child-count:8; gap:14px;">
+
+      <!-- वाद -->
+      <div class="branch">
+      <span class="node section">वाद</span>
+        <div class="branch-children">
+          <div class="branch-child"><span class="node">विद्वमण्डन</span></div>
+          <div class="branch-child"><span class="node">भक्तिहेतुनिर्णय</span></div>
+          <div class="branch-child"><span class="node">भक्तिहंस</span></div>
+          <div class="branch-child"><span class="node">मुक्तितारतम्य</span></div>
+          <div class="branch-child"><span class="node">उत्सवनिर्णय</span></div>
+          <div class="branch-child"><span class="node">जन्माष्टमीनिर्णय</span></div>
+          <div class="branch-child"><span class="node">रामनवमीनिर्णय</span></div>
+          <div class="branch-child"><span class="node">डोलोत्सवनिर्णय</span></div>
+        </div>
+      </div>
+
+      <!-- ९ विज्ञप्ति -->
+      <div class="branch">
+        <span class="node section">९ विज्ञप्ति</span>
+      </div>
+
+      
+      <!-- सेवोपयोगी -->
+      <div class="branch">
+        <span class="node section">सेवोपयोगी</span>
+        <div class="branch-children">
+          <div class="branch-child"><span class="node">पुरुषोत्तमप्रतिष्ठाप्रकार</span></div>
+          <div class="branch-child">
+            <div style="display:flex;flex-direction:column;align-items:flex-start;">
+              <span class="node">आर्या</span>
+              <div class="branch-sub-children">
+                <div class="branch-sub-child"><span class="node">प्रबोध</span></div>
+                <div class="branch-sub-child"><span class="node">मंगला</span></div>
+                <div class="branch-sub-child"><span class="node">पलना</span></div>
+                <div class="branch-sub-child"><span class="node">राजभोग</span></div>
+                <div class="branch-sub-child"><span class="node">शयन</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="branch-child">
+            <div style="display:flex;flex-direction:column;align-items:flex-start;">
+              <span class="node">पद</span>
+              <div class="branch-sub-children">
+                <div class="branch-sub-child"><span class="node">अष्टपदी</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="branch-child"><span class="node">सेवाश्लोकी</span></div>
+        </div>
+      </div>
+      
+      <!-- १६ पत्र -->
+      <div class="branch">
+        <span class="node section">१६ पत्र</span>
+      </div>
+
+
+
+      <!-- स्तोत्र -->
+      <div class="branch">
+        <span class="node section">स्तोत्र</span>
+        <div class="branch-children">
+          <!-- मंगला-चरण -->
+          <div class="branch-child"><span class="node">मंगला-चरण</span></div>
+          <!-- आचार्य -->
+          <div class="branch-child">
+            <div style="display:flex;flex-direction:column;align-items:flex-start;">
+              <span class="node">आचार्य</span>
+              <div class="branch-sub-children">
+                <div class="branch-sub-child"><span class="node">सर्वोत्तम</span></div>
+                <div class="branch-sub-child"><span class="node">वल्लभाष्टक</span></div>
+                <div class="branch-sub-child"><span class="node">स्फुरत्कृष्ण-प्रेमामृत</span></div>
+              </div>
+            </div>
+          </div>
+          <!-- स्वामिनी -->
+          <div class="branch-child">
+            <div style="display:flex;flex-direction:column;align-items:flex-start;">
+              <span class="node">स्वामिनी</span>
+              <div class="branch-sub-children">
+                <div class="branch-sub-child"><span class="node">श्रीस्वामिनी प्रार्थना</span></div>
+                <div class="branch-sub-child"><span class="node">श्रीस्वामिनी अष्टकम्</span></div>
+                <div class="branch-sub-child"><span class="node">श्रीस्वामिनी स्तोत्रम्</span></div>
+                <div class="branch-sub-child">
+                  <div style="display:flex;flex-direction:column;align-items:flex-start;">
+                    <span class="node">श्रीराधा</span>
+                    <div class="branch-sub-children">
+                      <div class="branch-sub-child"><span class="node">राधाप्रार्थना-चतु:श्लोकी</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="branch-sub-child">
+                  <div style="display:flex;flex-direction:column;align-items:flex-start;">
+                    <span class="node">श्रीयमुना</span>
+                    <div class="branch-sub-children">
+                      <div class="branch-sub-child"><span class="node">यमुनाष्टपदी</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- प्रभु -->
+          <div class="branch-child">
+            <div style="display:flex;flex-direction:column;align-items:flex-start;">
+              <span class="node">प्रभु</span>
+              <div class="branch-sub-children">
+                <div class="branch-sub-child"><span class="node">भुजंगप्रयाताष्टकम्</span></div>
+                <div class="branch-sub-child"><span class="node">श्रीगोकुलाष्टकम्</span></div>
+                <div class="branch-sub-child"><span class="node">ललितत्रिभंगीस्तोत्रम्</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- उपदेश -->
+      <div class="branch">
+        <span class="node section">उपदेश</span>
+        <div class="branch-children">
+          <div class="branch-child"><span class="node">चतु:श्लोकी-१</span></div>
+          <div class="branch-child"><span class="node">चतु:श्लोकी-२</span></div>
+          <div class="branch-child"><span class="node">रक्षासमरणम्</span></div>
+          <div class="branch-child"><span class="node">भक्तिजीवनम्</span></div>
+        </div>
+      </div>
+
+      <!-- लीला -->
+      <div class="branch">
+        <span class="node section">लीला</span>
+        <div class="branch-children">
+          <div class="branch-child"><span class="node">दानलीलाष्टक</span></div>
+          <div class="branch-child"><span class="node">रससर्वस्व</span></div>
+          <div class="branch-child"><span class="node">स्वप्नदर्शन</span></div>
+          <div class="branch-child"><span class="node">गुप्तरस</span></div>
+          <div class="branch-child"><span class="node">व्रतचर्यापदी</span></div>
+        </div>
+      </div>
+
+      <!-- प्रकीर्ण -->
+      <div class="branch">
+        <span class="node section">प्रकीर्ण</span>
+        <div class="branch-children">
+          <div class="branch-child"><span class="node">शृंगारसमण्डन</span></div>
+        </div>
+      </div>
+
+    </div><!-- /branches -->
+  </div><!-- /top-tree -->
+</div>
+
+<!-- ════════════════════════════════════════
+     CHART 2: व्याख्या
+════════════════════════════════════════ -->
+<div class="chart-section">
+  <div class="chart-title">चित्र २ — व्याख्या ग्रन्थ</div>
+
+  <div class="top-tree">
+    <div class="root-node"><span class="node root">व्याख्या</span></div>
+    <div class="root-vline"></div>
+
+    <div class="branches" style="gap:20px;">
+
+      <!-- व्याख्या -->
+      <div class="branch">
+        <span class="node section">व्याख्या</span>
+        <div class="branch-children">
+          <div class="branch-child"><span class="node">गीतातात्पर्य / गीताहेतुनिर्णय</span></div>
+          <div class="branch-child"><span class="node">न्यासादेश</span></div>
+          <div class="branch-child"><span class="node">सुबोधिनीपे टिप्पणी</span></div>
+          <div class="branch-child"><span class="node">गायत्री</span></div>
+          <div class="branch-child">
+            <div style="display:flex;flex-direction:column;">
+              <span class="node">षोडशग्रंथ</span>
+              <div class="branch-sub-children">
+                <div class="branch-sub-child"><span class="node">यमुनाष्टक</span></div>
+                <div class="branch-sub-child"><span class="node">सिद्धान्तमुक्तावली</span></div>
+                <div class="branch-sub-child"><span class="node">नवरत्न</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="branch-child"><span class="node">वृत्रासुर चतु:श्लोकी</span></div>
+          <div class="branch-child"><span class="node" style="white-space:normal;max-width:200px;">भागवतके चतुर्थ स्कन्धके १-३ अध्यायोंपे व्याख्या</span></div>
+          <div class="branch-child"><span class="node">गीतगोविन्द</span></div>
+          <div class="branch-child"><span class="node">कृष्णप्रेमामृत</span></div>
+          <div class="branch-child"><span class="node">मधुराष्टक</span></div>
+        </div>
+      </div>
+
+      <!-- पूर्ति -->
+      <div class="branch">
+        <span class="node section">पूर्ति</span>
+        <div class="branch-children">
+          <div class="branch-child"><span class="node">ब्रम्हसूत्र</span></div>
+          <div class="branch-child"><span class="node" style="white-space:normal;max-width:160px;">निबन्धपे प्रकाश और योजना</span></div>
+        </div>
+      </div>
+
+      <!-- स्वतंत्र -->
+      <div class="branch">
+        <span class="node section">स्वतंत्र</span>
+        <div class="branch-children">
+          <div class="branch-child"><span class="node">भगवानपि ता रात्री:</span></div>
+          <div class="branch-child"><span class="node">श्रुतिगीतार्थ</span></div>
+          <div class="branch-child"><span class="node" style="white-space:normal;max-width:200px;">कायेनवाचा-मनसेन्द्रियै: वा</span></div>
+          <div class="branch-child"><span class="node">नृदेहम् आद्यं सुलभम्</span></div>
+          <div class="branch-child"><span class="node">कथाइमास्ते</span></div>
+          <div class="branch-child"><span class="node">नैवात्मनप्रभु: अयं</span></div>
+        </div>
+      </div>
+
+      <!-- प्रक्षेप -->
+      <div class="branch">
+        <span class="node section">प्रक्षेप</span>
+        <div class="branch-children">
+          <div class="branch-child"><span class="node" style="white-space:normal;max-width:200px;">भाष्य सुबोधिनी प्रकाश आदिमे प्रकीर्ण</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -133,7 +133,7 @@ function TreeLinkItem({ node }: { node: NavNode }) {
 
 function ScripturesMega() {
   return (
-    <div className="grid max-h-[min(75vh,680px)] grid-cols-1 gap-4 overflow-y-auto overscroll-contain p-5 sm:grid-cols-2 xl:grid-cols-3">
+    <div className="main-nav-scriptures-masonry p-5">
       {scripturesTree.map((section) => (
         <div
           key={section.label}
@@ -290,19 +290,10 @@ function MobileNode({ node, onNavigate }: { node: NavNode; onNavigate: () => voi
       <summary className="cursor-pointer list-none px-4 py-3.5 text-sm font-medium text-[#4a1c24] [&::-webkit-details-marker]:hidden">
         <span className="flex items-center justify-between gap-2">
           {node.label}
-          <ChevronDown className="main-nav-mobile-chevron text-[#722f37]/60 transition-transform group-open:rotate-180" />
+          <ChevronDown className="main-nav-mobile-chevron text-[#722f37]/60 transition-transform" />
         </span>
       </summary>
       <div className="main-nav-mobile-details-body border-t border-[#c9a227]/25 bg-[#fdf6e8]/80 px-2 py-2">
-        {node.href ? (
-          <NavAnchor
-            href={node.href}
-            onClick={onNavigate}
-            className="mb-2 block rounded-lg px-3 py-2 text-sm font-medium text-[#1a5c3a] hover:bg-white/60"
-          >
-            Open “{node.label}” on archive ↗
-          </NavAnchor>
-        ) : null}
         <div className="flex flex-col gap-0.5">
           {kids.map((c) => (
             <MobileNode key={`${node.label}-${c.label}`} node={c} onNavigate={onNavigate} />

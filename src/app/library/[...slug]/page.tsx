@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import Link from "next/link";
 import { LegacyHtmlContent } from "@/components/legacy-html-content";
+import { VitthalnathCharts } from "@/components/vitthalnath-charts";
 import { LEGACY_ORIGIN } from "@/lib/navigation";
 
 type PageProps = {
@@ -195,7 +196,10 @@ export default async function LibraryLegacyPage({ params }: PageProps) {
             </p>
           </div>
         ) : (
-          <LegacyHtmlContent html={responsiveHtml} />
+          <>
+            <LegacyHtmlContent html={responsiveHtml} />
+            {legacyPath === "ShreeVitthalnathji.shtml" ? <VitthalnathCharts /> : null}
+          </>
         )}
       </div>
     </div>

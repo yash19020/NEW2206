@@ -2,13 +2,61 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { MainNav } from "@/components/main-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { site } from "@/lib/content";
 
 export function SiteHeader() {
+  const [isVisible, setIsVisible] = useState(true);
+  const lastYRef = useRef(0);
+  const downDistanceRef = useRef(0);
+  const upDistanceRef = useRef(0);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      const delta = y - lastYRef.current;
+
+      // Keep header visible near top.
+      if (y < 72) {
+        setIsVisible(true);
+        downDistanceRef.current = 0;
+        upDistanceRef.current = 0;
+      } else if (delta > 0) {
+        downDistanceRef.current += delta;
+        upDistanceRef.current = 0;
+
+        // Hide only after a meaningful downward travel.
+        if (isVisible && downDistanceRef.current > 120) {
+          setIsVisible(false);
+          downDistanceRef.current = 0;
+        }
+      } else if (delta < 0) {
+        upDistanceRef.current += Math.abs(delta);
+        downDistanceRef.current = 0;
+
+        // Show after scrolling up a bit, no need to reach top.
+        if (!isVisible && upDistanceRef.current > 44) {
+          setIsVisible(true);
+          upDistanceRef.current = 0;
+        }
+      }
+
+      lastYRef.current = y;
+    };
+
+    lastYRef.current = window.scrollY;
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [isVisible]);
+
   return (
-    <header className="sticky top-0 z-[100] overflow-visible px-3 pb-3 pt-3 sm:px-5">
+    <motion.header
+      className="sticky top-0 z-[100] overflow-visible px-3 pb-3 pt-3 sm:px-5"
+      animate={{ y: isVisible ? 0 : -150, opacity: isVisible ? 1 : 0 }}
+      transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] as const }}
+    >
       <motion.div
         className="relative mx-auto max-w-7xl overflow-visible rounded-2xl border-2 border-[#c9a227]/50 bg-[#fffdf9]/93 shadow-[0_16px_48px_-12px_rgba(114,47,55,0.22)] backdrop-blur-md"
         initial={{ opacity: 0, y: -10 }}
@@ -56,6 +104,6 @@ export function SiteHeader() {
           </div>
         </div>
       </motion.div>
-    </header>
+    </motion.header>
   );
 }
