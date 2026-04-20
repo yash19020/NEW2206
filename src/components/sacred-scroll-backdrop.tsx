@@ -3,7 +3,7 @@
 import type { MotionValue } from "framer-motion";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import type { CSSProperties } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
 import { PichwaiCutoutLayers } from "@/components/pichwai-cutout-layers";
 import { RiverBottomBackdrop } from "@/components/river-bottom-backdrop";
@@ -121,6 +121,57 @@ function FallbackSvgMotifs({
 }
 
 /** Warm temple / pichwai-inspired backdrop. Add PNGs via `src/lib/pichwai-assets.ts`. */
+function useIsMobileViewport() {
+  return useSyncExternalStore(
+    (onStoreChange) => {
+      if (typeof window === "undefined") return () => {};
+      const media = window.matchMedia("(max-width: 900px)");
+      const handler = () => onStoreChange();
+      media.addEventListener("change", handler);
+      return () => media.removeEventListener("change", handler);
+    },
+    () => (typeof window !== "undefined" ? window.matchMedia("(max-width: 900px)").matches : false),
+    () => false,
+  );
+}
+
+function MobileStaticBackdrop() {
+  return (
+    <>
+      <div
+        className="sacred-bg-layer absolute inset-0 z-[-20]"
+        style={{
+          backgroundImage: "var(--sacred-bg-image)",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+        }}
+      />
+      <svg
+        className="sacred-vine-overlay absolute inset-0 z-[-10] h-full w-full opacity-[0.045]"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <pattern id="pichwai-vine-mobile" width="80" height="80" patternUnits="userSpaceOnUse">
+            <path d="M0 40 Q20 20 40 40 T80 40" fill="none" stroke="#722f37" strokeWidth="0.6" />
+            <circle cx="40" cy="40" r="2.5" fill="#1a5c3a" opacity="0.45" />
+            <path d="M38 38 L40 34 L42 38 Z" fill="#c9a227" opacity="0.55" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#pichwai-vine-mobile)" />
+      </svg>
+      <div className="dark-stars-layer absolute inset-0 z-[-19]" />
+      <div className="dark-shooting-stars absolute inset-0 z-[-18]">
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
+    </>
+  );
+}
+
 function AnimatedBackdrop({ showDecorativeLayers }: { showDecorativeLayers: boolean }) {
   const { scrollYProgress } = useScroll();
   const p = useSpring(scrollYProgress, { stiffness: 42, damping: 26, mass: 0.4 });
@@ -227,5 +278,13 @@ function AnimatedBackdrop({ showDecorativeLayers }: { showDecorativeLayers: bool
 
 export function SacredScrollBackdrop() {
   const pathname = usePathname();
+  const isMobileViewport = useIsMobileViewport();
+  if (isMobileViewport) {
+    return (
+      <div className="pointer-events-none fixed inset-0 z-0 isolate overflow-hidden" aria-hidden>
+        <MobileStaticBackdrop />
+      </div>
+    );
+  }
   return <AnimatedBackdrop showDecorativeLayers={pathname === "/"} />;
 }
