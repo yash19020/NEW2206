@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "scrape:legacy": "node scripts/scrape-legacy-pages.mjs"
+    "scrape:legacy": "node scripts/scrape-legacy-pages.mjs",
+    "scrape:blogs": "node scripts/scrape-pushtipedia-blogs.mjs"
   },
   "dependencies": {
     "framer-motion": "^12.38.0",

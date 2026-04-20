@@ -162,6 +162,7 @@ export const mainNavigation: NavNode[] = [
   { label: "Articles", href: L("Misc-Articles.shtml") },
   { label: "Vachanamruts", href: L("Articles.shtml") },
   { label: "Search Granth", href: "/search" },
+  { label: "Blogs", href: "/blogs" },
   { label: "Subscribe", href: L("Subscribe.shtml") },
   { label: "Contact Us", href: "/contact" },
 ];

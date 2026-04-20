@@ -316,6 +316,7 @@ function MobileNode({ node, onNavigate }: { node: NavNode; onNavigate: () => voi
 const articlesHref = mainNavigation.find((n) => n.label === "Articles")?.href ?? "#";
 const vachanHref = mainNavigation.find((n) => n.label === "Vachanamruts")?.href ?? "#";
 const searchHref = mainNavigation.find((n) => n.label === "Search Granth")?.href ?? "#";
+const blogsHref = mainNavigation.find((n) => n.label === "Blogs")?.href ?? "/blogs";
 const subscribeHref = mainNavigation.find((n) => n.label === "Subscribe")?.href ?? "#";
 
 export function MainNav() {
@@ -416,6 +417,13 @@ export function MainNav() {
             Search Granth
           </NavAnchor>
           <NavAnchor
+            href={blogsHref}
+            onClick={close}
+            className="block rounded-xl border border-[#c9a227]/35 bg-[#fff9ed] px-4 py-3 text-sm font-medium text-[#3d1620]"
+          >
+            Blogs
+          </NavAnchor>
+          <NavAnchor
             href={subscribeHref}
             onClick={close}
             className="block rounded-xl border border-[#c9a227]/35 bg-[#fff9ed] px-4 py-3 text-sm font-medium text-[#3d1620]"
@@ -461,6 +469,7 @@ export function MainNav() {
         <PillLink href={articlesHref}>Articles</PillLink>
         <PillLink href={vachanHref}>Vachanamruts</PillLink>
         <PillLink href={searchHref}>Search</PillLink>
+        <PillLink href={blogsHref}>Blogs</PillLink>
         <PillLink href={subscribeHref}>Subscribe</PillLink>
         <PillLink href="/contact">Contact</PillLink>
       </nav>
