@@ -267,18 +267,59 @@ function PortalDropdown({
   );
 }
 
-function MobileNode({ node, onNavigate }: { node: NavNode; onNavigate: () => void }) {
+function mobileLevelStyles(depth: number) {
+  if (depth <= 0) {
+    return {
+      shell: "main-nav-mobile-level-0 border-[#c9a227]/35 bg-[#fffdf8]/90",
+      body: "main-nav-mobile-level-0-body border-[#c9a227]/25 bg-[#fdf6e8]/80",
+      text: "text-[#4a1c24]",
+      accent: "border-l-[#c9a227]/60",
+    };
+  }
+  if (depth === 1) {
+    return {
+      shell: "main-nav-mobile-level-1 border-[#722f37]/30 bg-[#fff7ef]/92",
+      body: "main-nav-mobile-level-1-body border-[#722f37]/22 bg-[#fff3e7]/86",
+      text: "text-[#5a252c]",
+      accent: "border-l-[#722f37]/45",
+    };
+  }
+  return {
+    shell: "main-nav-mobile-level-2 border-[#1a5c3a]/30 bg-[#f4fbf7]/90",
+    body: "main-nav-mobile-level-2-body border-[#1a5c3a]/22 bg-[#eef8f2]/84",
+    text: "text-[#244639]",
+    accent: "border-l-[#1a5c3a]/45",
+  };
+}
+
+function MobileNode({
+  node,
+  onNavigate,
+  depth = 0,
+}: {
+  node: NavNode;
+  onNavigate: () => void;
+  depth?: number;
+}) {
   const kids = node.children?.length ? node.children : null;
+  const styles = mobileLevelStyles(depth);
+  const indentClass = depth > 0 ? "ml-2" : "";
 
   if (!kids) {
     if (!node.href) {
-      return <p className="px-4 py-2 text-sm text-[#8b7355]">{node.label}</p>;
+      return (
+        <div
+          className={`mb-2 rounded-xl border px-4 py-2 text-sm ${styles.shell} ${styles.text} ${indentClass} border-l-4 ${styles.accent} last:mb-0`}
+        >
+          {node.label}
+        </div>
+      );
     }
     return (
       <NavAnchor
         href={node.href}
         onClick={onNavigate}
-        className="block rounded-xl px-4 py-3 text-sm text-[#3d1620] hover:bg-[#f5e6c8]/80"
+        className={`mb-2 block rounded-xl border px-4 py-3 text-sm ${styles.shell} ${styles.text} ${indentClass} border-l-4 ${styles.accent} hover:brightness-[0.98] last:mb-0`}
       >
         {node.label}
       </NavAnchor>
@@ -286,17 +327,21 @@ function MobileNode({ node, onNavigate }: { node: NavNode; onNavigate: () => voi
   }
 
   return (
-    <details className="main-nav-mobile-details group mb-2 overflow-hidden rounded-xl border border-[#c9a227]/35 bg-[#fffdf8]/90 last:mb-0">
-      <summary className="cursor-pointer list-none px-4 py-3.5 text-sm font-medium text-[#4a1c24] [&::-webkit-details-marker]:hidden">
+    <details
+      className={`main-nav-mobile-details group mb-2 overflow-hidden rounded-xl border ${styles.shell} ${indentClass} border-l-4 ${styles.accent} last:mb-0`}
+    >
+      <summary
+        className={`cursor-pointer list-none px-4 py-3.5 text-sm font-medium ${styles.text} [&::-webkit-details-marker]:hidden`}
+      >
         <span className="flex items-center justify-between gap-2">
           {node.label}
           <ChevronDown className="main-nav-mobile-chevron text-[#722f37]/60 transition-transform" />
         </span>
       </summary>
-      <div className="main-nav-mobile-details-body border-t border-[#c9a227]/25 bg-[#fdf6e8]/80 px-2 py-2">
+      <div className={`main-nav-mobile-details-body border-t px-2 py-2 ${styles.body}`}>
         <div className="flex flex-col gap-0.5">
           {kids.map((c) => (
-            <MobileNode key={`${node.label}-${c.label}`} node={c} onNavigate={onNavigate} />
+            <MobileNode key={`${node.label}-${c.label}`} node={c} onNavigate={onNavigate} depth={depth + 1} />
           ))}
         </div>
       </div>
@@ -388,6 +433,7 @@ export function MainNav() {
               key={block.label}
               node={{ label: block.label, children: block.children }}
               onNavigate={close}
+              depth={0}
             />
           ))}
           <NavAnchor
