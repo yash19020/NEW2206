@@ -318,6 +318,36 @@ details summary::-webkit-details-marker {
   color: #e8edf7 !important;
 }
 
+/* Override legacy inline bgcolor attributes in dark mode tables */
+:root[data-theme="dark"] .legacy-content tr[bgcolor] th,
+:root[data-theme="dark"] .legacy-content tr[bgcolor] td,
+:root[data-theme="dark"] .legacy-content th[bgcolor],
+:root[data-theme="dark"] .legacy-content td[bgcolor] {
+  background: rgba(18, 25, 36, 0.92) !important;
+  color: #e8edf7 !important;
+}
+
+:root[data-theme="dark"] .legacy-content tr[style*="ff6d00"] th,
+:root[data-theme="dark"] .legacy-content tr[style*="ff6d00"] td,
+:root[data-theme="dark"] .legacy-content th[style*="ff6d00"],
+:root[data-theme="dark"] .legacy-content td[style*="ff6d00"],
+:root[data-theme="dark"] .legacy-content tr[style*="rgb(255,109,0)"] th,
+:root[data-theme="dark"] .legacy-content tr[style*="rgb(255,109,0)"] td,
+:root[data-theme="dark"] .legacy-content th[style*="rgb(255,109,0)"],
+:root[data-theme="dark"] .legacy-content td[style*="rgb(255,109,0)"] {
+  background: rgba(18, 25, 36, 0.92) !important;
+  color: #e8edf7 !important;
+}
+
+:root[data-theme="dark"] .legacy-content tr[bgcolor] th *,
+:root[data-theme="dark"] .legacy-content tr[bgcolor] td *,
+:root[data-theme="dark"] .legacy-content tr[style*="ff6d00"] th *,
+:root[data-theme="dark"] .legacy-content tr[style*="ff6d00"] td *,
+:root[data-theme="dark"] .legacy-content tr[style*="rgb(255,109,0)"] th *,
+:root[data-theme="dark"] .legacy-content tr[style*="rgb(255,109,0)"] td * {
+  color: #e8edf7 !important;
+}
+
 :root[data-theme="dark"] .legacy-content tr:nth-child(even) td {
   background: rgba(18, 25, 36, 0.9) !important;
 }
@@ -560,6 +590,61 @@ details summary::-webkit-details-marker {
 
 .legacy-content tr:nth-child(even) td {
   background: #fcf6ea;
+}
+
+/* Modernize legacy e-book/action links shown in table body cells */
+.legacy-content tbody tr:not(:first-child) td:last-child {
+  color: transparent !important;
+  font-size: 0 !important;
+}
+
+.legacy-content tbody tr:not(:first-child) td:last-child > :not(a) {
+  display: none !important;
+}
+
+.legacy-content tbody tr:not(:first-child) td:last-child img {
+  display: none !important;
+}
+
+.legacy-content tbody tr:not(:first-child) td:last-child a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(26, 92, 58, 0.3);
+  background: rgba(233, 244, 238, 0.95);
+  color: transparent !important;
+  font-size: 0 !important;
+  line-height: 1;
+  padding: 0.24rem 0.52rem;
+  text-decoration: none;
+  vertical-align: middle;
+  background-image: none !important;
+}
+
+.legacy-content tbody tr:not(:first-child) td:last-child a > * {
+  display: none !important;
+}
+
+.legacy-content tbody tr:not(:first-child) td:last-child a::before {
+  content: none !important;
+}
+
+.legacy-content tbody tr:not(:first-child) td:last-child a::after {
+  content: "Open ↗";
+  color: #1a5c3a;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.legacy-content tbody tr:not(:first-child) td:last-child a:hover {
+  border-color: rgba(114, 47, 55, 0.4);
+  background: #f5e6c8;
+}
+
+.legacy-content tbody tr:not(:first-child) td:last-child a:hover::after {
+  color: #722f37;
 }
 
 .legacy-content img {
@@ -930,6 +1015,22 @@ details summary::-webkit-details-marker {
   border-color: rgba(122, 130, 143, 0.55) !important;
   background: rgba(26, 29, 36, 0.94) !important;
   color: #e7ebf3 !important;
+}
+
+:root[data-theme="dark"] .vt-lang-pill {
+  border-color: rgba(122, 130, 143, 0.5) !important;
+  background: rgba(26, 29, 36, 0.92) !important;
+  color: #d9e0ec !important;
+}
+
+:root[data-theme="dark"] .vt-lang-pill:hover {
+  background: rgba(42, 47, 58, 0.95) !important;
+}
+
+:root[data-theme="dark"] .vt-lang-pill.vt-lang-pill--active {
+  border-color: rgba(164, 176, 196, 0.72) !important;
+  background: rgba(68, 77, 94, 0.98) !important;
+  color: #f3f6fc !important;
 }
 
 :root[data-theme="dark"] .vt-root-vline,

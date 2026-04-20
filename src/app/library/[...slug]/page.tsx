@@ -60,6 +60,13 @@ function sanitizeLegacyHtml(html: string) {
       /<p[^>]*>\s*\*{0,2}\s*Disclaimer:\s*If anyone has any type of copyright issues[\s\S]*?<\/p>/gi,
       "",
     )
+    // Remove legacy standalone "e" markers used as old e-book icons.
+    .replace(/(<a\b[^>]*>)\s*e\s*(<\/a>)/gi, "$1$2")
+    .replace(/(<td\b[^>]*>\s*)(?:<font[^>]*>\s*)?e(?:\s*<\/font>)?\s*(<a\b)/gi, "$1$2")
+    // Remove legacy Wingdings/Webdings based icon fragments near e-book links.
+    .replace(/<[^>]*style=["'][^"']*(?:wingdings|webdings)[^"']*["'][^>]*>[\s\S]*?<\/[^>]+>/gi, "")
+    .replace(/(<a\b[^>]*>)\s*(?:<font[^>]*>)?\s*(?:e|E)\s*(?:<\/font>)?\s*(<\/a>)/gi, "$1$2")
+    .replace(/(<td\b[^>]*>\s*)(?:&nbsp;|\s|<font[^>]*>|<\/font>)*(?:e|E)(?:&nbsp;|\s|<font[^>]*>|<\/font>)*(?=<a\b)/gi, "$1")
     .replace(/<table\b/gi, '<div class="legacy-table-wrap"><table')
     .replace(/<\/table>/gi, "</table></div>");
 }
@@ -84,6 +91,11 @@ function replaceAcharyaHeroImages(html: string, legacyPath: string) {
       alt: "Shree Vitthalnathji",
       large: true,
       remove: [/<img[^>]*src=["']https:\/\/www\.pushtisahitya\.org\/images\/Shri_Gusainji\.jpg["'][^>]*>/gi],
+    },
+    "Shreeyamunastakam.shtml": {
+      src: "/pichwai/Yamunaji.png",
+      alt: "Shree Yamunaji",
+      remove: [/<img[^>]*src=["']https:\/\/www\.pushtisahitya\.org\/images\/ShreeYamunaji\.jpg["'][^>]*>/gi],
     },
   };
 

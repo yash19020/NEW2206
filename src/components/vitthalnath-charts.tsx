@@ -247,9 +247,9 @@ export function VitthalnathCharts() {
         <button
           type="button"
           onClick={() => setLang("hi")}
-          className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
+          className={`vt-lang-pill rounded-full border px-3 py-1 text-xs font-semibold transition ${
             lang === "hi"
-              ? "border-[#722f37] bg-[#f5e6c8] text-[#4a1c24]"
+              ? "vt-lang-pill--active border-[#722f37] bg-[#f5e6c8] text-[#4a1c24]"
               : "border-[#c9a227]/45 bg-[#fffdf8] text-[#5c4a3d] hover:bg-[#fff9ed]"
           }`}
         >
@@ -258,9 +258,9 @@ export function VitthalnathCharts() {
         <button
           type="button"
           onClick={() => setLang("en")}
-          className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
+          className={`vt-lang-pill rounded-full border px-3 py-1 text-xs font-semibold transition ${
             lang === "en"
-              ? "border-[#1f2937] bg-[#e5e7eb] text-[#111827]"
+              ? "vt-lang-pill--active border-[#1f2937] bg-[#e5e7eb] text-[#111827]"
               : "border-[#c9a227]/45 bg-[#fffdf8] text-[#5c4a3d] hover:bg-[#fff9ed]"
           }`}
         >
