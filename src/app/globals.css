@@ -548,6 +548,23 @@ details summary::-webkit-details-marker {
   height: auto;
 }
 
+.legacy-content .acharya-hero-image {
+  display: block;
+  margin: 0 auto 1rem;
+  width: min(560px, 96%) !important;
+  max-width: 100%;
+  height: auto;
+}
+
+.legacy-content .acharya-hero-image--large {
+  width: min(680px, 98%) !important;
+}
+
+.legacy-content .acharya-hero-wrap {
+  display: block;
+  text-align: center;
+}
+
 .legacy-content iframe {
   width: min(100%, 960px);
   max-width: 100%;

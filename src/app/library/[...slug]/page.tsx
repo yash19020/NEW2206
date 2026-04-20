@@ -63,6 +63,42 @@ function sanitizeLegacyHtml(html: string) {
     .replace(/<\/table>/gi, "</table></div>");
 }
 
+function replaceAcharyaHeroImages(html: string, legacyPath: string) {
+  const config: Record<string, { src: string; alt: string; large?: boolean; remove: RegExp[] }> = {
+    "Shreevallabhacharyaji.shtml": {
+      src: "/pichwai/Vallabhacharyaji.png",
+      alt: "Shree Vallabhacharyaji",
+      large: true,
+      remove: [
+        /<img[^>]*src=["']https:\/\/www\.pushtisahitya\.org\/images\/slide0052_image100\.jpg["'][^>]*>/gi,
+      ],
+    },
+    "ShreeGopinathji.shtml": {
+      src: "/pichwai/Gopinathji.png",
+      alt: "Shree Gopinathji",
+      remove: [/<img[^>]*src=["']https:\/\/www\.pushtisahitya\.org\/images\/ShreeGopinathji\.jpg["'][^>]*>/gi],
+    },
+    "ShreeVitthalnathji.shtml": {
+      src: "/pichwai/Vitthalnathji.png",
+      alt: "Shree Vitthalnathji",
+      large: true,
+      remove: [/<img[^>]*src=["']https:\/\/www\.pushtisahitya\.org\/images\/Shri_Gusainji\.jpg["'][^>]*>/gi],
+    },
+  };
+
+  const item = config[legacyPath];
+  if (!item) return html;
+
+  let out = html;
+  for (const pattern of item.remove) {
+    out = out.replace(pattern, "");
+  }
+
+  const sizeClass = item.large ? " acharya-hero-image--large" : "";
+  const injected = `<div class="acharya-hero-wrap"><img src="${item.src}" alt="${item.alt}" class="acharya-hero-image${sizeClass}" data-no-save draggable="false"></div>`;
+  return `${injected}\n${out}`;
+}
+
 function normalizeTitle(value: string) {
   return value
     .toLowerCase()
@@ -125,7 +161,7 @@ export default async function LibraryLegacyPage({ params }: PageProps) {
         : "";
   const pageHtml = page?.html ?? "";
   const responsiveHtml = removeDuplicateLeadingHeading(
-    sanitizeLegacyHtml(pageHtml),
+    sanitizeLegacyHtml(replaceAcharyaHeroImages(pageHtml, legacyPath)),
     legacyPath.replace(/\.shtml$/i, ""),
   );
 

@@ -381,7 +381,7 @@ export function MainNav() {
         </div>
         <div className="min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain p-3 pb-[max(1rem,env(safe-area-inset-bottom))]">
           {!isHome ? (
-            <div className="px-1">
+            <div className="px-1 pb-2">
               <PillLink href="/" onClick={close}>
                 Home
               </PillLink>
