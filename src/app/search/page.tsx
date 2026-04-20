@@ -90,8 +90,15 @@ async function getSearchItems(): Promise<SearchItem[]> {
   return items;
 }
 
-export default async function SearchPage() {
+type SearchPageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function SearchPage({ searchParams }: SearchPageProps) {
   const items = await getSearchItems();
-  return <SiteSearch items={items} />;
+  const params = searchParams ? await searchParams : {};
+  const raw = params.q;
+  const initialQuery = (Array.isArray(raw) ? raw[0] : raw ?? "").trim();
+  return <SiteSearch items={items} initialQuery={initialQuery} />;
 }
 

@@ -84,9 +84,9 @@ function excerpt(text: string, queryTokens: string[]) {
   return `${start > 0 ? "..." : ""}${text.slice(start, end)}${end < text.length ? "..." : ""}`;
 }
 
-export function SiteSearch({ items }: { items: SearchItem[] }) {
-  const [query, setQuery] = useState("");
-  const [submitted, setSubmitted] = useState("");
+export function SiteSearch({ items, initialQuery = "" }: { items: SearchItem[]; initialQuery?: string }) {
+  const [query, setQuery] = useState(initialQuery);
+  const [submitted, setSubmitted] = useState(initialQuery);
 
   const indexed = useMemo<IndexedItem[]>(
     () =>

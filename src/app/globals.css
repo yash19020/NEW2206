@@ -543,12 +543,23 @@ details summary::-webkit-details-marker {
   width: 100%;
   border-collapse: collapse;
   margin: 1rem 0;
+  background: #fffbf4;
+  border: 1px solid rgba(114, 47, 55, 0.16);
 }
 
 .legacy-content th,
 .legacy-content td {
-  border: 1px solid rgba(114, 47, 55, 0.2);
+  border: 1px solid rgba(114, 47, 55, 0.16);
   padding: 0.45rem 0.6rem;
+  background: rgba(255, 251, 244, 0.9);
+}
+
+.legacy-content th {
+  background: #f6ede0;
+}
+
+.legacy-content tr:nth-child(even) td {
+  background: #fcf6ea;
 }
 
 .legacy-content img {
