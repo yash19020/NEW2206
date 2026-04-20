@@ -155,9 +155,9 @@ function AnimatedBackdrop({ showDecorativeLayers }: { showDecorativeLayers: bool
     <div className="pointer-events-none fixed inset-0 z-0 isolate overflow-hidden" aria-hidden>
       {/* Primary SVG background: always bottom-most, scroll-linked top->bottom. */}
       <motion.div
-        className="absolute inset-0 z-[-20]"
+        className="sacred-bg-layer absolute inset-0 z-[-20]"
         style={{
-          backgroundImage: 'url("/pichwai/front%20page/background.svg")',
+          backgroundImage: "var(--sacred-bg-image)",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPositionX: "center",
@@ -165,8 +165,17 @@ function AnimatedBackdrop({ showDecorativeLayers }: { showDecorativeLayers: bool
         }}
       />
 
+      <motion.div className="dark-stars-layer absolute inset-0 z-[-19]" style={{ y: bgPosY }} />
+      <div className="dark-shooting-stars absolute inset-0 z-[-18]">
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
+
       <svg
-        className="absolute inset-0 z-[-10] h-full w-full opacity-[0.045]"
+        className="sacred-vine-overlay absolute inset-0 z-[-10] h-full w-full opacity-[0.045]"
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>

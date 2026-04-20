@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { MainNav } from "@/components/main-nav";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { site } from "@/lib/content";
 
 export function SiteHeader() {
@@ -30,7 +31,8 @@ export function SiteHeader() {
             <MainNav />
           </div>
 
-          <div className="flex shrink-0 flex-wrap items-center justify-center gap-2 border-t border-[#c9a227]/25 pt-4 lg:border-t-0 lg:pt-0">
+          <div className="flex shrink-0 flex-wrap items-center justify-center gap-2 border-t border-[#c9a227]/25 pt-4 lg:flex-col lg:items-end lg:justify-center lg:border-t-0 lg:pt-0">
+            <ThemeToggle />
             <motion.a
               href="https://www.facebook.com/pushtisahitya"
               rel="noopener noreferrer"

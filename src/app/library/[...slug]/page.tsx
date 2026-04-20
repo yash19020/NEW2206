@@ -43,9 +43,62 @@ function sanitizeLegacyHtml(html: string) {
     .replace(/<\/?html[^>]*>/gi, "")
     .replace(/<\/?head[^>]*>[\s\S]*?<\/head>/gi, "")
     .replace(/<\/?body[^>]*>/gi, "")
+    // Remove legacy global header/sidebar blocks that are unrelated to page-specific content.
+    .replace(/<div[^>]+id=["']masthead["'][\s\S]*?<\/div>\s*<\/div>/gi, "")
+    .replace(/<div[^>]+id=["']navBar["'][\s\S]*?<!--\s*end navBar div\s*-->/gi, "")
+    .replace(/<div[^>]+id=["']headlines["'][\s\S]*?<\/div>\s*<\/div>/gi, "")
+    .replace(/<div[^>]+id=["']fb-root["'][\s\S]*?<\/div>/gi, "")
+    .replace(/<div[^>]+id=["']siteInfo["'][\s\S]*?<\/div>/gi, "")
+    .replace(/<img[^>]*TitleImage1\.jpg[^>]*>/gi, "")
     .replace(/<marquee[\s\S]*?<\/marquee>/gi, "")
+    .replace(
+      /<p[^>]*>\s*Note:\s*If any author or publisher has any issues with copyright[\s\S]*?<\/p>/gi,
+      "",
+    )
+    .replace(
+      /<p[^>]*>\s*\*{0,2}\s*Disclaimer:\s*If anyone has any type of copyright issues[\s\S]*?<\/p>/gi,
+      "",
+    )
     .replace(/<table\b/gi, '<div class="legacy-table-wrap"><table')
     .replace(/<\/table>/gi, "</table></div>");
+}
+
+function normalizeTitle(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/\.(shtml|html|htm)$/gi, "")
+    .replaceAll("-", " ")
+    .replaceAll("_", " ")
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function removeDuplicateLeadingHeading(html: string, pageTitle: string) {
+  const normalizedPageTitle = normalizeTitle(pageTitle);
+  if (!normalizedPageTitle) return html;
+
+  const leadingHeadingMatch = html.match(/^\s*<(h[1-6])[^>]*>([\s\S]*?)<\/\1>/i);
+  if (!leadingHeadingMatch) return html;
+
+  const headingText = leadingHeadingMatch[2]
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const normalizedHeading = normalizeTitle(headingText);
+  if (!normalizedHeading) return html;
+
+  // Remove only when the leading heading mirrors the page title.
+  if (
+    normalizedHeading === normalizedPageTitle ||
+    normalizedHeading.includes(normalizedPageTitle) ||
+    normalizedPageTitle.includes(normalizedHeading)
+  ) {
+    return html.replace(/^\s*<h[1-6][^>]*>[\s\S]*?<\/h[1-6]>/i, "").trimStart();
+  }
+
+  return html;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -71,7 +124,10 @@ export default async function LibraryLegacyPage({ params }: PageProps) {
         ? `This page could not be scraped earlier (${page.status}).`
         : "";
   const pageHtml = page?.html ?? "";
-  const responsiveHtml = sanitizeLegacyHtml(pageHtml);
+  const responsiveHtml = removeDuplicateLeadingHeading(
+    sanitizeLegacyHtml(pageHtml),
+    legacyPath.replace(/\.shtml$/i, ""),
+  );
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:py-14">

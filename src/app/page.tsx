@@ -34,7 +34,7 @@ export default function HomePage() {
           <div className="mt-10 flex flex-wrap gap-3">
             <motion.a
               href="/search"
-              className="inline-flex items-center justify-center rounded-full border-2 border-[#722f37]/40 bg-[#722f37] px-7 py-3.5 text-sm font-semibold text-[#fffdf8] shadow-md shadow-amber-900/20"
+              className="hero-primary-cta inline-flex items-center justify-center rounded-full border-2 border-[#f0c07e]/60 bg-[#f7c98a] px-7 py-3.5 text-sm font-semibold text-[#4a1c24] shadow-md shadow-amber-900/20 transition hover:bg-[#f9d7a6]"
               whileHover={{ scale: 1.02, y: -1 }}
               whileTap={{ scale: 0.98 }}
             >

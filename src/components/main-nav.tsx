@@ -103,10 +103,10 @@ function TreeLinkItem({ node }: { node: NavNode }) {
   if (node.children?.length) {
     return (
       <li className="px-3 py-2">
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-[#722f37]">
+        <p className="main-nav-group-heading rounded-md bg-[#722f37]/8 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#722f37]">
           {node.label}
         </p>
-        <ul className="mt-1.5 space-y-0.5 border-l-2 border-[#c9a227]/45 pl-2.5">
+        <ul className="main-nav-group-list mt-1.5 space-y-0.5 border-l-2 border-[#c9a227]/45 pl-2.5">
           {node.children.map((c) => (
             <TreeLinkItem key={`${node.label}-${c.label}`} node={c} />
           ))}
@@ -119,7 +119,7 @@ function TreeLinkItem({ node }: { node: NavNode }) {
       <li className="px-1">
         <NavAnchor
           href={node.href}
-          className="block rounded-lg px-2.5 py-1.5 text-sm text-[#3d1620] transition hover:bg-[#f5e6c8]/90 hover:text-[#722f37]"
+          className="main-nav-tree-link block rounded-lg px-2.5 py-1.5 text-sm text-[#3d1620] transition hover:bg-[#f5e6c8]/90 hover:text-[#722f37]"
         >
           {node.label}
         </NavAnchor>
@@ -127,7 +127,7 @@ function TreeLinkItem({ node }: { node: NavNode }) {
     );
   }
   return (
-    <li className="px-3 py-1 text-sm text-[#8b7355]">{node.label}</li>
+    <li className="main-nav-tree-muted px-3 py-1 text-sm text-[#8b7355]">{node.label}</li>
   );
 }
 
@@ -137,9 +137,9 @@ function ScripturesMega() {
       {scripturesTree.map((section) => (
         <div
           key={section.label}
-          className="rounded-xl border border-[#c9a227]/40 bg-gradient-to-b from-[#fff9ed] to-[#fdf6e8] p-4 shadow-inner shadow-amber-900/5"
+          className="main-nav-scripture-card rounded-xl border border-[#c9a227]/40 bg-gradient-to-b from-[#fff9ed] to-[#fdf6e8] p-4 shadow-inner shadow-amber-900/5"
         >
-          <h3 className="border-b border-[#722f37]/15 pb-2 text-xs font-bold uppercase tracking-wider text-[#722f37]">
+          <h3 className="main-nav-section-title border-b border-[#722f37]/15 pb-2 text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#722f37]">
             {section.label}
           </h3>
           <div className="mt-3">
@@ -255,7 +255,7 @@ function PortalDropdown({
             onMouseLeave={scheduleClose}
           >
             <div
-              className="max-h-[min(75vh,680px)] overflow-x-hidden overflow-y-auto rounded-2xl border-2 border-[#c9a227]/70 bg-[#fffdf8]/[0.98] shadow-[0_24px_70px_-14px_rgba(114,47,55,0.38)] backdrop-blur-sm ring-1 ring-[#722f37]/10"
+              className="main-nav-dropdown-panel max-h-[min(75vh,680px)] overflow-x-hidden overflow-y-auto rounded-2xl border-2 border-[#c9a227]/70 bg-[#fffdf8]/[0.98] shadow-[0_24px_70px_-14px_rgba(114,47,55,0.38)] backdrop-blur-sm ring-1 ring-[#722f37]/10"
               onClick={() => setOpen(false)}
             >
               {children}
@@ -286,14 +286,14 @@ function MobileNode({ node, onNavigate }: { node: NavNode; onNavigate: () => voi
   }
 
   return (
-    <details className="group mb-2 overflow-hidden rounded-xl border border-[#c9a227]/35 bg-[#fffdf8]/90 last:mb-0">
+    <details className="main-nav-mobile-details group mb-2 overflow-hidden rounded-xl border border-[#c9a227]/35 bg-[#fffdf8]/90 last:mb-0">
       <summary className="cursor-pointer list-none px-4 py-3.5 text-sm font-medium text-[#4a1c24] [&::-webkit-details-marker]:hidden">
         <span className="flex items-center justify-between gap-2">
           {node.label}
           <ChevronDown className="text-[#722f37]/60 transition-transform group-open:rotate-180" />
         </span>
       </summary>
-      <div className="border-t border-[#c9a227]/25 bg-[#fdf6e8]/80 px-2 py-2">
+      <div className="main-nav-mobile-details-body border-t border-[#c9a227]/25 bg-[#fdf6e8]/80 px-2 py-2">
         {node.href ? (
           <NavAnchor
             href={node.href}
@@ -355,13 +355,13 @@ export function MainNav() {
         id="mobile-nav-panel"
         role="dialog"
         aria-modal="true"
-        className="fixed inset-y-0 right-0 z-[10001] flex max-h-[100dvh] w-[min(100vw-1rem,26rem)] flex-col border-l-2 border-[#c9a227]/55 bg-[#fffdf8] shadow-2xl shadow-amber-900/25 backdrop-blur-md md:hidden"
+        className="main-nav-mobile-panel fixed inset-y-0 right-0 z-[10001] flex max-h-[100dvh] w-[min(100vw-1rem,26rem)] flex-col border-l-2 border-[#c9a227]/55 bg-[#fffdf8] shadow-2xl shadow-amber-900/25 backdrop-blur-md md:hidden"
         initial={{ x: "100%" }}
         animate={{ x: 0 }}
         exit={{ x: "100%" }}
         transition={{ type: "spring", stiffness: 320, damping: 34 }}
       >
-        <div className="flex shrink-0 items-center justify-between border-b border-[#c9a227]/35 bg-[#fdf6e8]/95 px-4 py-4 pt-[max(1rem,env(safe-area-inset-top))]">
+        <div className="main-nav-mobile-header flex shrink-0 items-center justify-between border-b border-[#c9a227]/35 bg-[#fdf6e8]/95 px-4 py-4 pt-[max(1rem,env(safe-area-inset-top))]">
           <span className="font-serif text-lg font-semibold text-[#722f37]">Browse granthas</span>
           <button
             type="button"
