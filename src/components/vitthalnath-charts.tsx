@@ -91,11 +91,17 @@ const chartOne: ChartBranch[] = [
           { label: t("श्रीस्वामिनी प्रार्थना", "Śrīsvāminīprārthanā"), href: searchHref("Śrīsvāminīprārthanā") },
           { label: t("श्रीस्वामिनी अष्टकम्", "Śrīsvāminīaṣṭakam"), href: searchHref("Śrīsvāminīaṣṭakam") },
           { label: t("श्रीस्वामिनी स्तोत्रम्", "Śrīsvāminīstotram"), href: searchHref("Śrīsvāminīstotram") },
-          { label: t("श्रीराधा", "Shri Radha"), href: searchHref("Shri Radha") },
-          { label: t("राधाप्रार्थना-चतु:श्लोकी", "Rādhāprārthanācatuḥślokī"), href: "/library/Chatuhshloki.shtml" },
-          { label: t("श्रीयमुना", "Shri Yamuna"), href: searchHref("Shri Yamuna") },
-          { label: t("यमुनाष्टपदी", "Yamunāṣṭapadī"), href: searchHref("Yamunāṣṭapadī") },
         ],
+      },
+      {
+        type: "group",
+        item: { label: t("श्रीराधा", "Shri Radha"), href: searchHref("Shri Radha") },
+        children: [{ label: t("राधाप्रार्थना-चतु:श्लोकी", "Rādhāprārthanācatuḥślokī"), href: "/library/Chatuhshloki.shtml" }],
+      },
+      {
+        type: "group",
+        item: { label: t("श्रीयमुना", "Shri Yamuna"), href: searchHref("Shri Yamuna") },
+        children: [{ label: t("यमुनाष्टपदी", "Yamunāṣṭapadī"), href: searchHref("Yamunāṣṭapadī") }],
       },
       {
         type: "group",
