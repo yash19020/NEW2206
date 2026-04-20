@@ -1,26 +1,5 @@
 import Link from "next/link";
-import { readFile } from "node:fs/promises";
-import path from "node:path";
-
-type BlogItem = {
-  title: string;
-  href: string;
-  excerpt?: string;
-};
-
-type BlogsSnapshot = {
-  generatedAt: string | null;
-  source: string;
-  count: number;
-  unavailable?: boolean;
-  items: BlogItem[];
-};
-
-async function getBlogsSnapshot(): Promise<BlogsSnapshot> {
-  const filePath = path.join(process.cwd(), "src/data/pushtipedia-blogs.json");
-  const raw = await readFile(filePath, "utf8");
-  return JSON.parse(raw) as BlogsSnapshot;
-}
+import { readPushtipediaSnapshot } from "@/lib/pushtipedia";
 
 export default async function BlogsPage({
   searchParams,
@@ -29,10 +8,10 @@ export default async function BlogsPage({
 }) {
   const { q = "" } = await searchParams;
   const query = q.trim().toLowerCase();
-  const snapshot = await getBlogsSnapshot();
+  const snapshot = await readPushtipediaSnapshot();
   const filtered = query
     ? snapshot.items.filter((item) => {
-        const text = `${item.title} ${item.excerpt ?? ""}`.toLowerCase();
+        const text = `${item.title} ${item.excerpt ?? ""} ${item.plainText ?? ""}`.toLowerCase();
         return text.includes(query);
       })
     : snapshot.items;
@@ -84,17 +63,12 @@ export default async function BlogsPage({
         <div className="mt-6 space-y-3">
           {filtered.map((item) => (
             <article
-              key={item.href}
+              key={item.id}
               className="rounded-xl border border-[#c9a227]/35 bg-[#fff9ed]/85 p-4 shadow-sm"
             >
-              <a
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium text-[#1a5c3a] hover:underline"
-              >
+              <Link href={`/blogs/${item.slug}`} className="font-medium text-[#1a5c3a] hover:underline">
                 {item.title}
-              </a>
+              </Link>
               {item.excerpt ? <p className="mt-1.5 text-sm text-[#3d1620]">{item.excerpt}</p> : null}
             </article>
           ))}
