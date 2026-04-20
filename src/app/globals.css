@@ -478,6 +478,17 @@ details summary::-webkit-details-marker {
   display: none;
 }
 
+/* Mobile performance mode: keep stars static and disable shooting stars */
+@media (max-width: 900px) {
+  :root[data-theme="dark"] .dark-stars-layer {
+    animation: none !important;
+  }
+
+  :root[data-theme="dark"] .dark-shooting-stars {
+    display: none !important;
+  }
+}
+
 .legacy-content {
   line-height: 1.75;
 }
