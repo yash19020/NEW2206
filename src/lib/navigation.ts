@@ -63,6 +63,10 @@ export const mainNavigation: NavNode[] = [
         children: [
           { label: "Shuksma Tika" },
           { label: "Shree Subodhini", href: L("ShreeSubodhini.shtml") },
+          {
+            label: "Shreemad Bhagwatam - Various Commentaries",
+            href: L("BhagwatVariousCommentaries.shtml"),
+          },
         ],
       },
       {
@@ -131,7 +135,14 @@ export const mainNavigation: NavNode[] = [
         ],
       },
       { label: "Manuscripts", href: L("Manuscripts.shtml") },
-      { label: "Pushtimargiya Magazines", href: L("Magazines.shtml") },
+      {
+        label: "Pushtimargiya Magazines",
+        children: [
+          { label: "Magazines Index", href: L("Magazines.shtml") },
+          { label: "Pushti Bhakti Sudha Magazine", href: L("PushtiBhaktiSudhaMagazine.shtml") },
+          { label: "Shuddh Bhakti Magazine", href: L("ShuddhBhaktiMagazine.shtml") },
+        ],
+      },
     ],
   },
   {
@@ -159,12 +170,34 @@ export const mainNavigation: NavNode[] = [
       { label: "Utsav Bhavna", href: L("UtsavBhavna.shtml") },
     ],
   },
-  { label: "Articles", href: L("Misc-Articles.shtml") },
+  {
+    label: "Articles",
+    children: [
+      { label: "Articles Index", href: L("Misc-Articles.shtml") },
+      { label: "Bhakti in Veda (Bhumadhikaran)", href: L("English/Philosophy/Articles/BhaktiInVeda/Bhumadhikaran.htm") },
+      { label: "Is God Cruel?", href: L("Gujarati/articles/NirdayBhagavan/IsGodCruel.htm") },
+      { label: "Purushottamya Gyanirasan Vaad", href: L("Gujarati/articles/Purushottamyagyanirasanvaad.htm") },
+      { label: "Sankhya Yog", href: L("Gujarati/articles/SaankhyaYog/SankyaYog.htm") },
+      { label: "Theory of Shankara and Vallabha", href: L("Gujarati/articles/ShankarAndVallabh/TheoryofShankaraandVallabha.htm") },
+      {
+        label: "Shree Vallabhacharya's Principles",
+        href: L("Gujarati/articles/ShreeVallabhacharyasPrinciplesAndOnlinePushtimargiyaTeleconferenceSatsangs/ShreeVallabhacharyasPrinciplesAndOnlinePushti.html"),
+      },
+      { label: "Nirodh Leela", href: L("NirodhLeela.html") },
+    ],
+  },
   { label: "Vachanamruts", href: L("Articles.shtml") },
   { label: "Search Granth", href: "/search" },
   { label: "Blogs", href: "/blogs" },
   { label: "Subscribe", href: L("Subscribe.shtml") },
-  { label: "Contact Us", href: "/contact" },
+  {
+    label: "Contact Us",
+    children: [
+      { label: "Contact Page", href: "/contact" },
+      { label: "Legacy Contact", href: L("contactus.shtml") },
+      { label: "Copyright Policy", href: L("copyright.shtml") },
+    ],
+  },
 ];
 
 export const scripturesTree =
