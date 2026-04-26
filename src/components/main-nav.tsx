@@ -349,11 +349,26 @@ function MobileNode({
   );
 }
 
-const articlesHref = mainNavigation.find((n) => n.label === "Articles")?.href ?? "#";
-const vachanHref = mainNavigation.find((n) => n.label === "Vachanamruts")?.href ?? "#";
-const searchHref = mainNavigation.find((n) => n.label === "Search Granth")?.href ?? "#";
-const blogsHref = mainNavigation.find((n) => n.label === "Blogs")?.href ?? "/blogs";
-const subscribeHref = mainNavigation.find((n) => n.label === "Subscribe")?.href ?? "#";
+function firstHref(node?: NavNode): string | undefined {
+  if (!node) return undefined;
+  if (node.href) return node.href;
+  for (const child of node.children ?? []) {
+    const href = firstHref(child);
+    if (href) return href;
+  }
+  return undefined;
+}
+
+function hrefFor(label: string, fallback: string) {
+  const node = mainNavigation.find((n) => n.label === label);
+  return firstHref(node) ?? fallback;
+}
+
+const articlesHref = hrefFor("Articles", "/library/Misc-Articles.shtml");
+const vachanHref = hrefFor("Vachanamruts", "/library/Articles.shtml");
+const searchHref = hrefFor("Search Granth", "/search");
+const blogsHref = hrefFor("Blogs", "/blogs");
+const subscribeHref = hrefFor("Subscribe", "/library/Subscribe.shtml");
 
 export function MainNav() {
   const [open, setOpen] = useState(false);
